@@ -3,9 +3,18 @@
 #include "Node.h"
 using namespace std;
 
-// link_1: https://gilsonguimaraes.wordpress.com/2011/07/03/codigo-lista-duplamente-encadeada-circular/
-// link_2: https://gist.github.com/tuliopaim/1564aa76080d15608971df288bfe8996
+/*
+ link_1: https://gilsonguimaraes.wordpress.com/2011/07/03/codigo-lista-duplamente-encadeada-circular/
+ link_2: https://gist.github.com/tuliopaim/1564aa76080d15608971df288bfe8996
 
+ relatório 05/01/22:
+  funcções feitas:
+        List(),~List(),empty(),size(),clear(),front(),back(),push_back(),push_front(),sobrecarga << 
+        em desemvolvimento:
+
+        
+        um relatório p/ colocar no final //bora
+*/
 
 class List{
 private:
@@ -45,20 +54,20 @@ public:
 List::List(){
      
      head=nullptr;
-    // head->next = nullptr;
-    // head->ant=nullptr;
      size_list = 0;
 };
 
 List::~List(){
-       Node* inicio = head;
-       while(head->next != inicio){
-               Node* temp = head;
-               head = head->next;
-               delete temp;
-        }
-        delete inicio;
-        size_list = 0;
+        
+    Node* inicio = head;
+	
+    while(head->next != inicio) {
+        Node *temp = head;
+        head = head->next;
+        delete temp;
+    }
+    size_list = 0;
+    
 };
 
 bool List::empty() const{
@@ -66,7 +75,7 @@ bool List::empty() const{
 };
 
 int& List::size() const{
-        int x = 0 + size_list;
+        int x = size_list;
         return x;
 };
 
@@ -92,9 +101,7 @@ Item& List::front(){
         return head->data;
 
 }
-//ei, então o back e o front são iguais né
-//por enquanto sim,usa o push_back por enquanto.
-// e que head anterior vai ser o (next) do nomo_node
+
 Item& List::back(){
         if(head==nullptr){
                 cout << "erro:lista vazia";
@@ -112,32 +119,26 @@ Item& List::back(){
 void List::push_front(const Item& data){
         
         if(head==nullptr){
-                //pera mas ele vai apontar pra quem
-                //ah lembrei de um negócio do pdf //o que é?//é sobre quando há um nó na lista circular
-                //olha lá no pdf do projeto, descobri uma coisa
+                
+                
                 Node *aux= new Node(data, aux, aux);
                 head=aux;
-                // vc tá dizendo para head apontar para ele msm nos dois lados?R:sim, pois é uma lista circular, quando vai pro último vai pro inico//faz sentido
-                //assim dá certo ?
-                //tipo se igualar head ao aux, head fica igual ao aux né ?
+                head->next = head; 
+                head->ant = head;
+                size_list++; 
+        
         }else{
-                Node *aux= new Node(data, aux, aux);
-                Node* ultimo = head->ant;
-                head->ant = aux;
-                aux->next = head;
-                aux->ant = ultimo;
+                Node *tusk=head;
+                Node *aux= new Node(data, nullptr, nullptr);
+                Node* ultimo = tusk->ant;
                 head = aux;
-                //ei podemos economizar linhas se colocarmos Node...aux); na linha 113. assim não seria nessesario a linha 123// o que vc acha?// não crashou :D
-                //significa que não há nada na lista R:sim, é nesse caso, por isso coloquei o if e o else
-                //ei, mas o que fiz foi naquele caso, no caso onde head==nullptr
+                aux->next = tusk;
+                aux->ant = ultimo;
+                tusk->ant = aux;
+                ultimo->next = aux;
+                size_list++; 
         }
-        /*
-        Node* ultimo = head->ant;
-        head->ant = aux;
-        aux->next = head;
-        aux->ant = ultimo;
-        head = aux;
-        */
+
 };
 
 void List::push_back(const Item& data) {
@@ -146,18 +147,32 @@ void List::push_back(const Item& data) {
     
     if(head == nullptr) {
         head = newnode;
+        head->next = head;
+        head->ant = head;
+        size_list++;
     }
     else {
+        
+        
+        Node *ultimo = head->ant;
+        ultimo->next = newnode;
+        newnode->ant = ultimo;
+        newnode->next = head;
+        head->ant = newnode;
+
+        /*
         Node *pos = head;
-        while(pos->next != nullptr) {
+        while(pos->next != head) {
             pos = pos->next;
         }
         pos->next = newnode;
+        head->ant = pos->next;
+        pos->next->next = head;
+        /*/
     }
     size_list++;
 }
 
-// operator<< sobrecarga
 std::ostream& operator<<(std::ostream& out, const List& list) {
     Node *atual = list.head;
     out << "[ ";
@@ -178,5 +193,56 @@ std::ostream& operator<<(std::ostream& out, const List& list) {
     out << "]";
     return out;
 }
+
+void List::pop_back(){
+        if(head==nullptr){
+                cout<< "Essa lista esta vazia.\n";
+                return;
+        }if(head->next==head){
+                head->next=nullptr;
+                head->ant=nullptr;
+                Node *apagar=head;
+                head=head->next;
+                delete apagar;
+                size_list=0;
+                return;
+        }
+        
+       Node *last=head->ant->ant;
+       Node *exclui=head->ant;
+       Node *first=head;
+       Node *josuke=head->ant;
+       last->next=first;
+       first->ant=last;
+       josuke=last;
+       
+       delete exclui;
+       size_list--;
+
+        
+        
+}
+
+void List::pop_front(){
+        if(head == nullptr){
+                cout << "Essa lista esta vazia.\n";
+                return;
+        }
+        if(head->next == head){
+                Node* temp = head;
+                head = nullptr;
+                delete temp;
+                return;
+        }
+        Node* temp = head;
+        Node* ultimo = head->ant;
+        Node* proximo = head->next;
+        head = proximo;
+        proximo->ant = ultimo;
+        ultimo->next = head;
+        size_list--;
+        delete temp;// eu acho q já tá bom essa func()
+        return;
+};
 
 #endif
