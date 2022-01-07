@@ -4,7 +4,7 @@
 #include <vector>
 #include "Linkedlist.h"
 #include "Node.h"
-//#include <cstddef>
+
 using namespace std;
 
 int main() {
@@ -24,7 +24,7 @@ int main() {
             tokens.push_back(buffer);
         };
         // exit
-		if(tokens[0] == "exit") {
+		if(tokens[0] == "sair") {
 			for(unsigned i = 0; i < listas.size(); i++)
 				delete listas[i];
 			listas.clear();
@@ -32,25 +32,40 @@ int main() {
 		}
 
 		//create
-		else if(tokens[0] == "create") {
+		else if(tokens[0] == "criar") {
 			List *novo = new List;
 			listas.push_back(novo);
 		}
 
 		// push back x l
-		else if(tokens[0] == "push_back") {
+		else if(tokens[0] == "push_b") {
 			int x = std::stoi(tokens[1]);
 			int l = std::stoi(tokens[2]);
 			listas[l]->push_back(x);
 		}
 
-		/*/ push front x l
-		else if(tokens[0] == "push_front") {
+		// push front x l
+		else if(tokens[0] == "push_f") { // devolvo dps
 			int x = std::stoi(tokens[1]);
 			int l = std::stoi(tokens[2]);
 			listas[l]->push_front(x);
 		}
-		// insetrAt x l
+
+		// pop back x 1
+		else if(tokens[0] == "pop_b") { // devolvo dps
+			int x = std::stoi(tokens[1]);
+			//int l = std::stoi(tokens[2]);
+			listas[x]->pop_back();
+		}
+
+		// pop front x 1
+		else if(tokens[0] == "pop_f") { 
+			int x = std::stoi(tokens[1]);
+			//int l = std::stoi(tokens[2]);
+			listas[x]->pop_front();
+		}
+
+		/*/ insetrAt x l
 		else if(tokens[0] == "insertAt") {
 			int x = std::stoi(tokens[1]);
 			int y = std::stoi(tokens[2]);
@@ -113,7 +128,7 @@ int main() {
 			listas[l1]->concat(*listas[l2]);
 		}
         /*/// show 
-		else if(tokens[0] == "show") {
+		else if(tokens[0] == "ver") {
             for(unsigned i = 0; i < listas.size(); ++i) {
                 cout << "lista " << i << ": " << *listas[i] << endl;
             }	
