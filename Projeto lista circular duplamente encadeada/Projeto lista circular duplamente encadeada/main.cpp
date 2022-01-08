@@ -23,6 +23,7 @@ int main() {
 		while(ss >> buffer){
             tokens.push_back(buffer);
         };
+
         // exit
 		if(tokens[0] == "sair") {
 			for(unsigned i = 0; i < listas.size(); i++)
@@ -31,10 +32,32 @@ int main() {
 			break;
 		}
 
+		//help(opcional)
+		else if(tokens[0] == "help") {
+			cout << " empty() - size() - void clear() - front() - back() - push_front() - push_back() \npop_front() - pop_back() - insertAt() - removeAt() - removeAll() - swap() - concat() - copy() - append() - equals - reverse() - merge() - operator[] (get??) \noperator= (copy??? x = y )\n";
+		}
+		
 		//create
 		else if(tokens[0] == "criar") {
 			List *novo = new List;
 			listas.push_back(novo);
+		}
+		
+		//front
+		else if(tokens[0] == "front") {
+			int l = std::stoi(tokens[1]);
+			cout << listas[l]->front() << endl;
+		}
+
+		//back
+		else if(tokens[0] == "back") {
+			int l = std::stoi(tokens[1]);
+			cout << listas[l]->back() << endl;
+		}
+		//size
+		else if(tokens[0] == "size") {
+			int l = std::stoi(tokens[1]);
+			cout << listas[l]->size() << endl;
 		}
 
 		// push back x l
@@ -65,7 +88,7 @@ int main() {
 			listas[x]->pop_front();
 		}
 
-		/*/ insetrAt x l
+		//insetrAt x l
 		else if(tokens[0] == "insertAt") {
 			int x = std::stoi(tokens[1]);
 			int y = std::stoi(tokens[2]);
@@ -76,7 +99,19 @@ int main() {
 		else if(tokens[0] == "removeAt") {
 			int x = std::stoi(tokens[1]);
 			int z = std::stoi(tokens[2]);
-			listas[z]->removeAt(x);
+			cout << (listas[z]->removeAt(x)) << " foi removido\n";
+		}
+		// remove All
+		else if(tokens[0] == "removeAll") {
+			int x = std::stoi(tokens[1]);
+			int z = std::stoi(tokens[2]);
+			listas[z]->removeAll(x);
+		}
+		// swap
+		else if(tokens[0] == "trocar") {
+			int x = std::stoi(tokens[1]);
+			int y = std::stoi(tokens[2]);
+			listas[y]->swap(*(listas[x]));
 		}
 		// copy l
 		else if(tokens[0] == "copy") {
@@ -84,16 +119,7 @@ int main() {
 			List *lcp = listas[l]->copy();
 			listas.push_back(lcp);
 		}
-		// front
-		else if(tokens[0] == "front") {
-			int l = std::stoi(tokens[1]);
-			cout << listas[l]->front() << endl;
-		}
-		// back
-		else if(tokens[0] == "back") {
-			int l = std::stoi(tokens[1]);
-			cout << listas[l]->back() << endl;
-		}
+
 		// append l a1 ... an 
 		else if(tokens[0] == "append") {
 			int l = std::stoi(tokens[1]);
@@ -103,7 +129,7 @@ int main() {
 				v[i] = std::stoi(tokens[i+2]);
 			listas[l]->append(v, n);
 		}
-		// equals l1 l2 
+		/*/ equals l1 l2 
 		else if(tokens[0] == "equals") {
 			int l1 = std::stoi(tokens[1]);
 			int l2 = std::stoi(tokens[2]);

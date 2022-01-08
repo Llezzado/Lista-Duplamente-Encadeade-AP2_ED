@@ -1,6 +1,6 @@
 #ifndef LIST_H
 #define LIST_H
-#include "Node.h"
+#include "Node.h"// vamo trabalhar no remover e inserir
 using namespace std;
 
 /*
@@ -34,8 +34,8 @@ public:
         void push_back(const Item& data);
         void pop_front();
         void pop_back();
-        void insertAt(const Item& data, int index);
-        Item removeAt(int index);
+        void insertAt(const Item& data, int id);
+        Item& removeAt(int index);
         void removeAll(const Item& data);
         void swap(List& lst);
         void concat(List& lst);
@@ -58,7 +58,8 @@ List::List(){
 };
 
 List::~List(){
-        
+
+        if(head == nullptr){return;}
     Node* inicio = head;
 	
     while(head->next != inicio) {
@@ -75,8 +76,8 @@ bool List::empty() const{
 };
 
 int& List::size() const{
-        int x = size_list;
-        return x;
+        Item x = size_list,&temp = x;
+        return temp;
 };
 
 void List::clear(){
@@ -98,14 +99,15 @@ Item& List::front(){
                 Item x = 0;
                 return x;
         }
-        return head->data;
+        Item x = head->data,&y = x;
+        return y;
 
 }
 
 Item& List::back(){
         if(head==nullptr){
                 cout << "erro:lista vazia";
-                Item x = 0;
+                Item &x = x;
                 return x;
         }
        Node *aux=head;
@@ -160,15 +162,6 @@ void List::push_back(const Item& data) {
         newnode->next = head;
         head->ant = newnode;
 
-        /*
-        Node *pos = head;
-        while(pos->next != head) {
-            pos = pos->next;
-        }
-        pos->next = newnode;
-        head->ant = pos->next;
-        pos->next->next = head;
-        /*/
     }
     size_list++;
 }
@@ -241,8 +234,268 @@ void List::pop_front(){
         proximo->ant = ultimo;
         ultimo->next = head;
         size_list--;
-        delete temp;// eu acho q já tá bom essa func()
+        delete temp;
         return;
 };
+
+/*
+codigo feito as pressas(é um insert)
+
+// Inserts data at any position in the range [0..size()]
+void List::insertAt(int index, Item data) {
+    if(index < 0 || index > tamanho) {
+        throw std::out_of_range("index out of range");
+    }
+    if(index == 0) {
+        
+		Node *newnode = new Node(data, nullptr, nullptr);
+		
+		Node* seg = sentinela->proximo; // sentinela é o msm q head
+		
+		Node* ant = sentinela->anterior;
+		
+		Node* old = sentinela;
+		
+		sentinela = newnode;
+
+		sentinela = newnode;
+		
+		sentinela->proximo = old;
+		
+		ant->proximo = sentinela;
+		
+		old->proximo = seg;
+		
+		sentinela->anterior = ant;
+		
+		seg->anterior = old;
+
+        tamanho++;
+        
+		return;
+    }
+    int counter = 0;
+    Node *atual = sentinela;
+    while(counter < index-1) {
+        counter++;
+        atual = atual->proximo;
+    }
+    Node *newnode = new Node(data, atual->proximo, atual);
+    atual->proximo = newnode;
+    tamanho++;
+}
+*/
+
+void List::insertAt(const Item& x,int id){
+        Node *aux=head;
+        Node *position= new Node (x, nullptr, nullptr);
+        if(id<0 || id>size_list){
+                throw std::out_of_range("index out of range");
+        }
+        if(id==0){
+
+             Node *position= new Node (x, nullptr, nullptr);
+             Node *anterior=aux->ant;
+             Node *proximo=aux->next;
+             
+             anterior->next=position;
+             aux->ant=position;
+             
+             position->next=aux;
+             position->ant =anterior;
+
+             head=position; 
+
+             size_list++;
+             return;   
+        }
+        int k=0;
+        while(k<id-1){
+                k++;
+                aux=aux->next;
+               
+        }
+            Node *tusk= new Node (x, aux->next, aux );
+            aux->next=tusk;
+             size_list++;
+
+};
+
+
+
+
+Item& List::removeAt(int id){
+        
+        Item info;
+        Node* pos = head;
+        size_list--;
+        
+        if(id < 0 || id > size_list || head == nullptr){
+                throw std::out_of_range("index out of range");
+        }
+
+        if(head == nullptr){
+                throw std::out_of_range("Erro: lista vazia");
+        }
+        
+        if(id == 0){
+                
+                info = head->data;
+                Item& ref = info;
+                
+
+                if(head->next == head){
+                        head->next=nullptr;
+                        head->ant=nullptr;
+                        Node *apagar=head;
+                        head=head->next;
+                        delete apagar;
+                        size_list=0;
+                        return ref;
+                }
+
+
+                head = pos->next;
+                head->ant = pos->ant;
+                (pos->ant)->next = head;
+                
+                
+                return ref;
+                
+        }
+
+        for(int c = 0;c < id;c++){pos = pos->next;};
+        info = pos->data;
+        Item& ref = info;
+        
+        (pos->ant)->next = pos->next;
+        (pos->next)->ant = pos->ant;
+
+        delete pos;
+        
+        return ref;
+};
+
+void List::removeAll(const Item& data){
+        Node* pos = head;
+        bool inicio = true;
+        int c = 0;
+        
+        while(pos != head || inicio){
+
+                if(pos == head){inicio = false;}
+
+                if(pos->data == data){
+                                               
+                        if(pos == head){
+                              
+                                if(head->next == head){
+                                        
+                                        head->next=nullptr;
+                                        head->ant=nullptr;
+                                        Node *apagar=head;
+                                        head=head->next;
+                                        delete apagar;
+                                        size_list=0;
+                                }
+
+
+                                head = pos->next;
+                                head->ant = pos->ant;
+                                (pos->ant)->next = head;
+                                
+                        }
+                        
+                        Node* temp = pos;
+                        (pos->ant)->next = pos->next;
+                        (pos->next)->ant = pos->ant;
+                        delete temp;
+                }
+                
+                c++;
+        }
+};
+
+void List::swap(List& lst){
+        Node* aux;
+        int size;
+        aux = lst.head;
+        size = lst.size_list;
+        lst.head = head;
+        lst.size_list = size_list;
+        head = aux;
+        size_list = size;
+
+};
+
+List* List::copy(){
+        
+        List *copia = new List;
+        Node* atual = head;
+        
+        if(atual != nullptr){
+                
+                bool x = true;
+                while(atual != head ||x) {
+                                
+                        if(atual == head){
+                                x = false;
+                        }
+                                
+                        //copia->push_back(atual->data);
+
+                        Node *newnode = new Node(atual->data, nullptr,nullptr);
+                        
+                        if(copia->head == nullptr) {
+                                copia->head = newnode;
+                                copia->head->next = copia->head;
+                                copia->head->ant = copia->head;
+                                copia->size_list++;
+                        }
+                        else {
+                                
+                                
+                                Node *ultimo = (copia->head)->ant;
+                                ultimo->next = newnode;
+                                newnode->ant = ultimo;
+                                newnode->next = copia->head;
+                                (copia->head)->ant = newnode;
+
+                                /*
+                                Node *pos = head;
+                                while(pos->next != head) {
+                                pos = pos->next;
+                                }
+                                pos->next = newnode;
+                                head->ant = pos->next;
+                                pos->next->next = head;
+                                /*/
+                        }
+                        copia->size_list++;
+
+                        atual =atual->next;
+                }
+        }
+        return copia;
+};
+
+void List::append(Item vec[], int n){
+        for(int x = 0;x<n;x++){
+                push_back(vec[x]);
+        }
+};
+
+void List::concat(List& lst){
+        List *tusk=lst;
+        tusk->head=head;
+        tusk->size_list=size_list;
+        Node *aux=head;
+        Node *dirty=tusk->head;
+        while(aux->next!=nullptr){
+                
+        }
+        
+}
+
 
 #endif
