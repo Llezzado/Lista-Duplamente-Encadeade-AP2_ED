@@ -94,11 +94,11 @@ void List::clear(){
 };
 
 Item& List::front(){
-        if(head==nullptr){
+        /*if(head==nullptr){
                 cout<<"erro: lista vazia";
                 Item x = 0;
                 return x;
-        }
+        }*/
         Item x = head->data,&y = x;
         return y;
 
@@ -154,11 +154,9 @@ void List::push_back(const Item& data) {
         size_list++;
     }
     else {
-        
-        
-        Node *ultimo = head->ant;
-        ultimo->next = newnode;
-        newnode->ant = ultimo;
+
+        (head->ant)->next = newnode;
+        newnode->ant = (head->ant);
         newnode->next = head;
         head->ant = newnode;
 
@@ -238,54 +236,6 @@ void List::pop_front(){
         return;
 };
 
-/*
-codigo feito as pressas(é um insert)
-
-// Inserts data at any position in the range [0..size()]
-void List::insertAt(int index, Item data) {
-    if(index < 0 || index > tamanho) {
-        throw std::out_of_range("index out of range");
-    }
-    if(index == 0) {
-        
-		Node *newnode = new Node(data, nullptr, nullptr);
-		
-		Node* seg = sentinela->proximo; // sentinela é o msm q head
-		
-		Node* ant = sentinela->anterior;
-		
-		Node* old = sentinela;
-		
-		sentinela = newnode;
-
-		sentinela = newnode;
-		
-		sentinela->proximo = old;
-		
-		ant->proximo = sentinela;
-		
-		old->proximo = seg;
-		
-		sentinela->anterior = ant;
-		
-		seg->anterior = old;
-
-        tamanho++;
-        
-		return;
-    }
-    int counter = 0;
-    Node *atual = sentinela;
-    while(counter < index-1) {
-        counter++;
-        atual = atual->proximo;
-    }
-    Node *newnode = new Node(data, atual->proximo, atual);
-    atual->proximo = newnode;
-    tamanho++;
-}
-*/
-
 void List::insertAt(const Item& x,int id){
         Node *aux=head;
         Node *position= new Node (x, nullptr, nullptr);
@@ -321,9 +271,6 @@ void List::insertAt(const Item& x,int id){
 
 };
 
-
-
-
 Item& List::removeAt(int id){
         
         Item info;
@@ -332,10 +279,6 @@ Item& List::removeAt(int id){
         
         if(id < 0 || id > size_list || head == nullptr){
                 throw std::out_of_range("index out of range");
-        }
-
-        if(head == nullptr){
-                throw std::out_of_range("Erro: lista vazia");
         }
         
         if(id == 0){
@@ -447,8 +390,6 @@ List* List::copy(){
                         if(atual == head){
                                 x = false;
                         }
-                                
-                        //copia->push_back(atual->data);
 
                         Node *newnode = new Node(atual->data, nullptr,nullptr);
                         
@@ -466,16 +407,6 @@ List* List::copy(){
                                 newnode->ant = ultimo;
                                 newnode->next = copia->head;
                                 (copia->head)->ant = newnode;
-
-                                /*
-                                Node *pos = head;
-                                while(pos->next != head) {
-                                pos = pos->next;
-                                }
-                                pos->next = newnode;
-                                head->ant = pos->next;
-                                pos->next->next = head;
-                                /*/
                         }
                         copia->size_list++;
 
@@ -487,22 +418,138 @@ List* List::copy(){
 
 void List::append(Item vec[], int n){
         for(int x = 0;x<n;x++){
-                push_back(vec[x]);
+                
+                Node *newnode = new Node(vec[x], nullptr,nullptr);
+                
+                if(head == nullptr) {
+                        head = newnode;
+                        head->next = head;
+                        head->ant = head;
+                        size_list++;
+                }
+                
+                else {
+                        
+                        
+                        Node *ultimo = head->ant;
+                        ultimo->next = newnode;
+                        newnode->ant = ultimo;
+                        newnode->next = head;
+                        head->ant = newnode;
+
+                }
+                
+                size_list++;;
         }
 };
-//ei man eu vou ter q sair, eu fiz upload no github agr, nam que isso, uma mão lava outra q nem a musica da vila sesamo"lava outra lava uma mão" nostalgico, vila sesamo é atemporal, ent eles tem cheat em criar históriakk, to indo até amanhã, tao me chamando //até
-/*/ok mano, eu entendo. Valeu por me ajudar e desculpa não ter  ajudado muito//huhum//falou e boa noite//kkk vila sesamo o anime que tem mais eps que one piece kkkkk//huhum kkk// tá cara, ate amanhã
-void List::concat(List& lst){
-        List *tusk=lst;
-        tusk->head=head;
-        tusk->size_list=size_list;
-        Node *aux=head;
-        Node *dirty=tusk->head;
-        while(aux->next!=nullptr){
-                
-        }
-        
-}*/
 
+void List::concat(List& lst){
+
+        Node *ultimo=head->ant;
+        Node *dirty=lst.head;
+        int n[lst.size_list];
+        //cara, seria melhor o push back, pois iria adiconar os elemnetos no final da lista
+        // vdd
+        for (int i = 0; i < lst.size_list; i++)
+        {
+                push_back(dirty->data);
+               // Node *a=dirty;
+                dirty = dirty->next;
+                //dirty->ant=nullptr;//acho que dar assim
+                //delete a;
+        }
+        //ele pegou o -2(head de lst)// vamos ver por pates// jaja agnt volta
+        lst.head = nullptr;
+        lst.size_list = 0;//vamo ver
+
+        /*
+                        // vc não consege acessar diretemente o lst não?
+                        
+                        
+                        Node *nodelst= new Node(dirty->data, dirty->next, ultimo->ant);//pq ele aponta pra cabeça next?
+                        //Node *proximo=ultimo;poetico.//nam men, so vi vc batendo no tecla do só isso.//cara vamo ver esse e deixar os outro pra outro dia//ok
+                        //ultimo=ultimo->ant;//humm ?//eu uso ele pra colocar o next direito
+                        while(dirty!=nullptr){
+
+                        ultimo=nodelst;
+                        ultimo->ant->next=ultimo;
+                        dirty->next->ant=ultimo;
+                        ultimo->ant=ultimo->ant;
+                        ultimo->next=dirty->next;
+                        Node *lembre=ultimo;
+                        ultimo=ultimo->next;
+                        ultimo->ant=lembre;
+                        lembre->next=ultimo;
+                        dirty=dirty->next;
+                        delete dirty->ant;
+                        dirty->ant=nullptr;
+                        size_list++;
+
+
+                        }
+
+                // proximo->ant=ultimo;
+                        ultimo->next=proximo;
+        */
+
+        
+}
+
+bool List::equals(const List& lst)const{
+        
+        if(size_list  == lst.size_list){
+                
+                Node* pos = head;
+                Node* aux = lst.head;
+                bool inicio = true;
+
+                while(pos != head ||inicio){
+
+                        if(pos == head){inicio = false;}
+                        
+                        if(pos->data != aux->data){
+                                return false;
+                        }
+
+                        pos = pos->next;
+                        aux = aux->next;
+
+                }
+                return true;
+        }
+
+        return false;
+};
+
+/*/esses devem ser cursed
+void List::reverse(){
+        
+};
+
+void List::merge(List& lst){
+
+};
+
+Item& List::operator[](int index){
+      Node* pos = List.head;
+        
+        for ( int i = 0; i < index; i++){
+                pos = pos->next;
+        }
+        return pos->data;
+};
+
+List& List::operator=(const List& lst){
+        
+        List *novo = new List;
+        Node *pos = lst.head;
+        for (int i = 0; i < lst.size_list; i++){
+                novo->push_back(pos->data);
+                pos = pos->next;
+        }
+        novo->size_list = lst.size_list;
+        clear();
+        return novo;
+};*/
 
 #endif
