@@ -148,6 +148,7 @@ int main() {
 			int y = std::stoi(tokens[2]);
 			cout << (listas[y])[x] << endl;
 		}*/
+
 		// equals l1 l2 
 		else if(tokens[0] == "equals") {
 			int l1 = std::stoi(tokens[1]);
@@ -156,19 +157,11 @@ int main() {
 			else cout << "listas diferentes" << endl;
 		}
 
-		/*/ reverse l
+		// reverse l
 		else if(tokens[0] == "reverse") {
 			int l = std::stoi(tokens[1]);
 			listas[l]->reverse();
 		}
-    
-	    // concat l1 l2
-		else if(tokens[0] == "concat") {
-			int l1 = std::stoi(tokens[1]);
-			int l2 = std::stoi(tokens[2]);
-			listas[l1]->concat(*listas[l2]);
-		}
-        */
 		
 		// show 
 		else if(tokens[0] == "ver") {

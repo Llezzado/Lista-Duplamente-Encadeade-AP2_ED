@@ -448,50 +448,33 @@ void List::concat(List& lst){
         Node *ultimo=head->ant;
         Node *dirty=lst.head;
         int n[lst.size_list];
-        //cara, seria melhor o push back, pois iria adiconar os elemnetos no final da lista
-        // vdd
-        for (int i = 0; i < lst.size_list; i++)
+
+        for (int i = 0; i < lst.size_list-1; i++)
         {
-                push_back(dirty->data);
-               // Node *a=dirty;
-                dirty = dirty->next;
-                //dirty->ant=nullptr;//acho que dar assim
-                //delete a;
-        }
-        //ele pegou o -2(head de lst)// vamos ver por pates// jaja agnt volta
-        lst.head = nullptr;
-        lst.size_list = 0;//vamo ver
-
-        /*
-                        // vc não consege acessar diretemente o lst não?
+                
+                Node *newnode = new Node(dirty->data, nullptr,nullptr);
                         
-                        
-                        Node *nodelst= new Node(dirty->data, dirty->next, ultimo->ant);//pq ele aponta pra cabeça next?
-                        //Node *proximo=ultimo;poetico.//nam men, so vi vc batendo no tecla do só isso.//cara vamo ver esse e deixar os outro pra outro dia//ok
-                        //ultimo=ultimo->ant;//humm ?//eu uso ele pra colocar o next direito
-                        while(dirty!=nullptr){
-
-                        ultimo=nodelst;
-                        ultimo->ant->next=ultimo;
-                        dirty->next->ant=ultimo;
-                        ultimo->ant=ultimo->ant;
-                        ultimo->next=dirty->next;
-                        Node *lembre=ultimo;
-                        ultimo=ultimo->next;
-                        ultimo->ant=lembre;
-                        lembre->next=ultimo;
-                        dirty=dirty->next;
-                        delete dirty->ant;
-                        dirty->ant=nullptr;
+                if(head == nullptr) {
+                        head = newnode;
+                        head->next = head;
+                        head->ant = head;
                         size_list++;
+                }
+                else {
 
+                        (head->ant)->next = newnode;
+                        newnode->ant = (head->ant);
+                        newnode->next = head;
+                        head->ant = newnode;
 
-                        }
+                }
+                size_list++;
+                
+                dirty = dirty->next;
 
-                // proximo->ant=ultimo;
-                        ultimo->next=proximo;
-        */
-
+        }
+        lst.head = nullptr;
+        lst.size_list = 0;
         
 }
 
@@ -521,14 +504,74 @@ bool List::equals(const List& lst)const{
         return false;
 };
 
-/*/esses devem ser cursed
+
 void List::reverse(){
-        
+
+        Node *aux,*posicao,*novo = (head->ant);
+        aux = novo;
+        posicao = aux->ant;
+        while(posicao != novo){
+                aux->ant = aux->next;
+                aux->next = posicao;
+                posicao = posicao -> ant;
+                aux = aux->next;
+        }
+
+
+
+        aux->ant = aux->next;
+        aux->next = posicao;
+        head = posicao;
+
 };
+
+/*
+void merge(List& lst);
+L1 = [ 1 2 3 4 ] e L2 = [ 7 8 9 0 5 6 ].
+o resultado L1 = [ 1 7 2 8 3 9 4 0 5 6 ] e L2 = []
+*/
 
 void List::merge(List& lst){
+        Node *aux=head;
+        Node *tusk=lst.head,*a=head,*b=lst.head,*x = head->next,*y = lst.head->next;
+        bool vez = true;
+        
+        aux->next = tusk; //eu posso apagar?
+        tusk->ant = aux;//falta o merge,sobrecargas de [] e =//sim, pode apagar
+        aux = aux->next;//já volto, so vou fazer uma coisinha aqui ok
+        int cont = 0;
+        while (cont < size_list && cont < lst.size_list)//o que falta ?
+        {//hummm vamos fazer o merge pois é a mais dificil né// cara, vamos apagar o merge e refazer dnv
+                if(vez){//mas eles não nessesariamente precisa apagar,eu vou olhar o pdf//ok
+                        aux->next = x;//ei cara, em vez de um bool, usa assim: se tusk->next!=nullptr, pois os elementos da lista serão apagados
+                        x->ant = aux;//olha lá
+                        x = x->next;
+                        aux = aux->next;
+                        continue;
+                }
+                
+                aux->next = y;
+                y->ant = aux;
+                y = 
 
+
+                
+        }
+        
+        lst.head = nullptr;
+        lst.size_list = 0;
 };
+/*
+     Node *aux=head;
+     Node *valentine=lst.head;
+     int cont=0;
+     while(cont<lst.size_list + size_list){
+             if(valentine->next!=nullptr)
+
+     }
+*/
+
+/*
 
 Item& List::operator[](int index){
       Node* pos = List.head;
