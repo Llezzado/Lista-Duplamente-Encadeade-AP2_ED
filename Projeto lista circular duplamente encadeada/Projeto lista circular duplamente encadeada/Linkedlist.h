@@ -7,13 +7,6 @@ using namespace std;
  link_1: https://gilsonguimaraes.wordpress.com/2011/07/03/codigo-lista-duplamente-encadeada-circular/
  link_2: https://gist.github.com/tuliopaim/1564aa76080d15608971df288bfe8996
 
- relatório 05/01/22:
-  funcções feitas:
-        List(),~List(),empty(),size(),clear(),front(),back(),push_back(),push_front(),sobrecarga << 
-        em desemvolvimento:
-
-        
-        um relatório p/ colocar no final //bora
 */
 
 class List{
@@ -151,7 +144,7 @@ void List::push_back(const Item& data) {
         head = newnode;
         head->next = head;
         head->ant = head;
-        size_list++;
+        //size_list++;
     }
     else {
 
@@ -397,7 +390,7 @@ List* List::copy(){
                                 copia->head = newnode;
                                 copia->head->next = copia->head;
                                 copia->head->ant = copia->head;
-                                copia->size_list++;
+                                
                         }
                         else {
                                 
@@ -425,7 +418,6 @@ void List::append(Item vec[], int n){
                         head = newnode;
                         head->next = head;
                         head->ant = head;
-                        size_list++;
                 }
                 
                 else {
@@ -439,7 +431,7 @@ void List::append(Item vec[], int n){
 
                 }
                 
-                size_list++;;
+                size_list++;
         }
 };
 
@@ -448,50 +440,33 @@ void List::concat(List& lst){
         Node *ultimo=head->ant;
         Node *dirty=lst.head;
         int n[lst.size_list];
-        //cara, seria melhor o push back, pois iria adiconar os elemnetos no final da lista
-        // vdd
-        for (int i = 0; i < lst.size_list; i++)
+
+        for (int i = 0; i < lst.size_list-1; i++)
         {
-                push_back(dirty->data);
-               // Node *a=dirty;
-                dirty = dirty->next;
-                //dirty->ant=nullptr;//acho que dar assim
-                //delete a;
-        }
-        //ele pegou o -2(head de lst)// vamos ver por pates// jaja agnt volta
-        lst.head = nullptr;
-        lst.size_list = 0;//vamo ver
-
-        /*
-                        // vc não consege acessar diretemente o lst não?
+                
+                Node *newnode = new Node(dirty->data, nullptr,nullptr);
                         
-                        
-                        Node *nodelst= new Node(dirty->data, dirty->next, ultimo->ant);//pq ele aponta pra cabeça next?
-                        //Node *proximo=ultimo;poetico.//nam men, so vi vc batendo no tecla do só isso.//cara vamo ver esse e deixar os outro pra outro dia//ok
-                        //ultimo=ultimo->ant;//humm ?//eu uso ele pra colocar o next direito
-                        while(dirty!=nullptr){
-
-                        ultimo=nodelst;
-                        ultimo->ant->next=ultimo;
-                        dirty->next->ant=ultimo;
-                        ultimo->ant=ultimo->ant;
-                        ultimo->next=dirty->next;
-                        Node *lembre=ultimo;
-                        ultimo=ultimo->next;
-                        ultimo->ant=lembre;
-                        lembre->next=ultimo;
-                        dirty=dirty->next;
-                        delete dirty->ant;
-                        dirty->ant=nullptr;
+                if(head == nullptr) {
+                        head = newnode;
+                        head->next = head;
+                        head->ant = head;
                         size_list++;
+                }
+                else {
 
+                        (head->ant)->next = newnode;
+                        newnode->ant = (head->ant);
+                        newnode->next = head;
+                        head->ant = newnode;
 
-                        }
+                }
+                size_list++;
+                
+                dirty = dirty->next;
 
-                // proximo->ant=ultimo;
-                        ultimo->next=proximo;
-        */
-
+        }
+        lst.head = nullptr;
+        lst.size_list = 0;
         
 }
 
@@ -521,17 +496,94 @@ bool List::equals(const List& lst)const{
         return false;
 };
 
-/*/esses devem ser cursed
+
 void List::reverse(){
-        
+
+        Node *aux,*posicao,*novo = (head->ant);
+        aux = novo;
+        posicao = aux->ant;
+        while(posicao != novo){
+                aux->ant = aux->next;
+                aux->next = posicao;
+                posicao = posicao -> ant;
+                aux = aux->next;
+        }
+
+
+
+        aux->ant = aux->next;
+        aux->next = posicao;
+        head = posicao;
+
 };
 
+/*
+void merge(List& lst);
+L1 = [ 1 2 3 4 ] e L2 = [ 7 8 9 0 5 6 ].
+o resultado L1 = [ 1 7 2 8 3 9 4 0 5 6 ] e L2 = []
+
+*/
 void List::merge(List& lst){
+     Node *aux=head;
+     Node *valentine=lst.head;
+     int cont=0;
+     int contadorfull=lst.size_list + size_list;
+     Node *ultimo=lst.head->ant;
+     while(cont<contadorfull){
+             if(valentine!=nullptr){
 
+                     Node *seguinte=aux->next->next;
+                     Node *proximo=valentine->next;
+                     valentine->next=aux->next;
+                     aux->next->ant=valentine;
+                     valentine->ant=aux;
+                     aux->next->next=aux->next;
+                     aux->next=valentine;
+                     valentine=proximo;
+                     delete valentine->ant;
+                     aux=aux->next->next;
+                     aux->next=seguinte;
+                     size_list++;
+                     lst.size_list--;
+
+                }else{
+                     Node *ficar=aux;
+                     aux=aux->next;
+                     aux->ant=ficar;
+                }
+                cont++;
+
+        }
+
+        head=aux->next;
 };
+/*arrumei a sobrecarga de [ ]//testa aí meu codigo
+Node *x = head->next,*y = lst.head->next,*h = head;//não foi dnv..
+bool vez = true;
+int c = 0;
+h->next = lst.head;
+h->ant = (lst.head)->ant;
+(h->next)->ant = h;
+(h->ant)->next = h;
+for (c = 0; c < size_list && c < lst.size_list ; c++)
+{
+        if(vez){
+                h->next = x;
+                x->next;
+                (h->next)->ant = h;
+                h = h->next;
+                vez = false;
+        }else{
+                h->next = y;
+                y = y->next;
+                (h->next)->ant = h;
+                vez = true
+        }
+}
 
+*/
 Item& List::operator[](int index){
-      Node* pos = List.head;
+        Node* pos = head;
         
         for ( int i = 0; i < index; i++){
                 pos = pos->next;
@@ -539,17 +591,23 @@ Item& List::operator[](int index){
         return pos->data;
 };
 
+
 List& List::operator=(const List& lst){
         
-        List *novo = new List;
-        Node *pos = lst.head;
-        for (int i = 0; i < lst.size_list; i++){
-                novo->push_back(pos->data);
+        clear();
+        List *x;
+        Node * pos = lst.head;
+        bool y = true;
+        while ( pos!= lst.head||y)
+        {
+                y = false;
+                push_back(pos->data);
                 pos = pos->next;
         }
-        novo->size_list = lst.size_list;
-        clear();
-        return novo;
-};*/
+        
+        x->size_list = lst.size_list;
+        List &z = *x;
+        return z;
+};
 
 #endif
