@@ -8,10 +8,17 @@
 
 using namespace std;
 
+/*
+Dupla:
+Nome: Juan Pablo Rufino Mesquita	Matrícula: 509982
+Nome: Álisson Rodrigues Fernandes	Matrícula: 510357
 
+Obs: leia o relatório para ver os comandos.
+*/
 int main() {
 
 	vector<List*> listas;
+
 	while(true) {
 		string comando;
 		getline(cin, comando);
@@ -32,11 +39,6 @@ int main() {
 			listas.clear();
 			break;
 		}
-
-		//help(opcional)
-		else if(tokens[0] == "help") {
-			cout << " empty() - size() - void clear() - front() - back() - push_front() - push_back() \npop_front() - pop_back() - insertAt() - removeAt() - removeAll() - swap() - concat() - copy() - append() - equals - reverse() - merge() - operator[] (get??) \noperator= (copy??? x = y )\n";
-		}
 		
 		//create
 		else if(tokens[0] == "criar") {
@@ -48,7 +50,7 @@ int main() {
 		else if(tokens[0] == "front") {
 			int l = std::stoi(tokens[1]);
 			if(listas[l]->size() > 0){cout << listas[l]->front() << endl;}else{
-				cout << "esta lista está vazia.\n";
+				cout << "esta lista esta vazia.\n";
 			}
 			
 		}
@@ -56,7 +58,18 @@ int main() {
 		//back
 		else if(tokens[0] == "back") {
 			int l = std::stoi(tokens[1]);
-			cout << listas[l]->back() << endl;
+			if(!listas[l]->empty()){
+				cout << listas[l]->back() << endl;
+			}else{
+				cout << "esta lista esta vazia.\n";
+			}
+			
+		}
+
+		//empty
+		else if(tokens[0] == "empty") {
+			int l = std::stoi(tokens[1]);
+			cout << listas[l]->empty() << endl;		
 		}
 
 		else if(tokens[0] == "concat") {
@@ -72,34 +85,34 @@ int main() {
 		}
 
 		//clean
-		else if(tokens[0] == "clean") {
+		else if(tokens[0] == "clear") {
 			int l = std::stoi(tokens[1]);
 			listas[l]->clear();
-			cout << "a Lista " << l << "foi esvasiada." << endl;
+			cout << "A lista " << l << " foi esvasiada." << endl;
 		}
 
 		// push back x l
-		else if(tokens[0] == "push_b") {
+		else if(tokens[0] == "push_back") {
 			int x = std::stoi(tokens[1]);
 			int l = std::stoi(tokens[2]);
 			listas[l]->push_back(x);
 		}
 
 		// push front x l
-		else if(tokens[0] == "push_f") { // devolvo dps
+		else if(tokens[0] == "push_front") {
 			int x = std::stoi(tokens[1]);
 			int l = std::stoi(tokens[2]);
 			listas[l]->push_front(x);
 		}
 
 		// pop back x 1
-		else if(tokens[0] == "pop_b") { // devolvo dps
+		else if(tokens[0] == "pop_back") {
 			int x = std::stoi(tokens[1]);
 			listas[x]->pop_back();
 		}
 
 		// pop front x 1
-		else if(tokens[0] == "pop_f") { 
+		else if(tokens[0] == "pop_front") { 
 			int x = std::stoi(tokens[1]);
 			listas[x]->pop_front();
 		}
@@ -184,10 +197,7 @@ int main() {
 		else if(tokens[0] == "igual") {
 			int x = std::stoi(tokens[1]);
 			int y = std::stoi(tokens[2]);
-			cout << "não crashou\n";
-			listas[y] = listas[x];
-			cout << "não crashou\n";
-			//cout << z[x] << endl;
+			*(listas[y]) = *(listas[x]);
 		}
 
 		// show 
