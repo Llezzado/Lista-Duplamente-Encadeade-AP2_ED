@@ -1,1 +1,1 @@
-Este projeto foi feito no meu primeiro ano na universidade, onde tive a primeira experiencia em c++, devo retornar ao repositorio de forma aperiodica para ver o meu avanço sobre a programação.
+Este projeto foi feito no primeiro ano na universidade, onde houve a primeira experiencia em c++,futuralmente retornar ao repositorio de forma aperiodica para ver os avanços sobre a nossa programação.
