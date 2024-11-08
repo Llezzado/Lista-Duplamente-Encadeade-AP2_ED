@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar projeto",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "Projeto-lista-circular-duplamente-encadeada/src/main.cpp",
+                "-IProjeto-lista-circular-duplamente-encadeada/lib",
+                "-o",
+                "Projeto-lista-circular-duplamente-encadeada/app/programa"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compila o projeto e gera o executável em app/"
+        }
+    ]
+}

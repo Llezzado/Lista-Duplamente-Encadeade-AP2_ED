@@ -1,6 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 #include "Node.h"// vamo trabalhar no remover e inserir
+#include <iostream>
 using namespace std;
 
 /*
@@ -552,7 +553,8 @@ void List::merge(List& lst){
                 
                 aux->next = y;
                 y->ant = aux;
-                y = 
+                y = y->next;
+                aux = aux->next;
 
 
                 
